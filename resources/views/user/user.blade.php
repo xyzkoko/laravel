@@ -1,0 +1,80 @@
+@extends('layouts.app')
+@section('app')
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">用户列表</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="overflow:hidden;line-height: 34px;">
+                    DataTables Advanced Tables
+                    @if(isset($buttonList[3]))<button class="btn btn-primary" type="button" style="float:right;" onclick="userAdd('{{$buttonList[3]['route']}}','{{$buttonList[3]['name']}}')">{{$buttonList[3]['name']}}</button>@endif
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-admin">
+                        <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>用户组</th>
+                            <th>邮箱</th>
+                            <th>创建时间</th>
+                            <th>最近登陆</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($userList as $rows)
+                            <tr>
+                                <td>{{$rows['name']}}</td>
+                                <td>{{$rows['user_role']['name']}}</td>
+                                <td>{{$rows['email']}}</td>
+                                <td>{{$rows['created_at']}}</td>
+                                <td class="center">{{$rows['updated_at']}}</td>
+                                <td class="center">
+                                    @if(isset($buttonList[8]) && $rows['roleid'] != 1)<button class="btn btn-outline btn-warning" type="button" onclick="userUpdate('{{$buttonList[8]['route']}}','{{$buttonList[8]['name']}}','/{{$rows['id']}}')">修改</button>@endif&nbsp;&nbsp;
+                                    @if(isset($buttonList[9]) && $rows['roleid'] != 1)<button class="btn btn-outline btn-danger" type="button" onclick="if(confirm('确定要删除吗?'))window.location='{{$buttonList[9]['route']}}'">删除</button>@endif
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#dataTables-admin').DataTable({
+            responsive: true
+        });
+    });
+    function userAdd($url,$title){
+        layer.open({
+            title :$title,
+            type: 2,
+            area: ['500px', '500px'],
+            skin: 'layui-layer-rim', //加上边框
+            content: [$url, 'no']
+        });
+    }
+    function userUpdate($url,$title,$id){
+        layer.open({
+            title :$title,
+            type: 2,
+            area: ['500px', '350px'],
+            skin: 'layui-layer-rim', //加上边框
+            content: [$url+$id, 'no']
+        });
+    }
+</script>
+@endsection
