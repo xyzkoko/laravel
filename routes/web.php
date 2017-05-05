@@ -19,6 +19,7 @@ Route::group(['namespace' => 'User','middleware' => 'auth.rule'], function(){
     Route::get('user', 'UserController@index')->name('user');
     Route::any('user/add', 'UserController@add')->name('user/add');
     Route::any('user/update/{id}', 'UserController@update')->name('user/update');
+    Route::delete('user/delete/{id}', 'UserController@delete')->name('user/delete');
 
     Route::get('userRole', 'UserRoleController@index')->name('userRole');
     //test

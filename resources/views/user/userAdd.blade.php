@@ -21,14 +21,17 @@
                                     <div class="form-group">
                                         <label>姓名</label>
                                         <input class="form-control" name="name">
+                                        <span class="help-block"><strong></strong></span>
                                     </div>
                                     <div class="form-group">
                                         <label>邮箱</label>
                                         <input class="form-control" name="email">
+                                        <span class="help-block"><strong></strong></span>
                                     </div>
                                     <div class="form-group">
                                         <label>初始密码</label>
                                         <input class="form-control" name="password" value="123456">
+                                        <span class="help-block"><strong></strong></span>
                                     </div>
                                     <div class="form-group">
                                         <label>所属用户组</label>
@@ -56,17 +59,30 @@
 <script>
 var frameindex= parent.layer.getFrameIndex(window.name);
 function fromSubmit(){
+    $('input+span>strong').text('');
+    $('input').parent().removeClass('has-error');
     var data = $('#form').serialize();
     var url = "";
-    $.post(url,data,function(data){
-        if(data.status=='success'){
-            layer.msg(data.msg, {time:1000}, function(){
-                parent.location.href="/user";
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: data,
+        dataType: 'json',
+        success: function(data){
+            if(data.status=='success'){
+                layer.msg(data.msg, {time:1000}, function(){
+                    parent.location.href="/user";
+                });
+            }
+        },
+        error:function(data){
+            $.each(data.responseJSON, function (key, value) {
+                var input = '#form input[name=' + key + ']';
+                $(input + '+span>strong').text(value);
+                $(input).parent().addClass('has-error');
             });
-        }else{
-
         }
-    },'json');
+    });
 }
 function fromQuit(){
     parent.layer.close(frameindex);

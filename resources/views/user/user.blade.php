@@ -37,8 +37,14 @@
                                 <td>{{$rows['created_at']}}</td>
                                 <td class="center">{{$rows['updated_at']}}</td>
                                 <td class="center">
-                                    @if(isset($buttonList[8]) && $rows['roleid'] != 1)<button class="btn btn-outline btn-warning" type="button" onclick="userUpdate('{{$buttonList[8]['route']}}','{{$buttonList[8]['name']}}','/{{$rows['id']}}')">修改</button>@endif&nbsp;&nbsp;
-                                    @if(isset($buttonList[9]) && $rows['roleid'] != 1)<button class="btn btn-outline btn-danger" type="button" onclick="if(confirm('确定要删除吗?'))window.location='{{$buttonList[9]['route']}}'">删除</button>@endif
+                                    @if(isset($buttonList[8]) && $rows['id'] != Auth::user()->id && $rows['roleid'] >= Auth::user()->roleid)<button class="btn btn-outline btn-warning" type="button" onclick="userUpdate('{{$buttonList[8]['route']}}','{{$buttonList[8]['name']}}','{{$rows['id']}}')">修改</button>@endif&nbsp;&nbsp;
+                                    @if(isset($buttonList[9]) && $rows['id'] != Auth::user()->id && $rows['roleid'] >= Auth::user()->roleid)
+                                        <form id="from" action="{{$buttonList[9]['route'].'/'.$rows['id']}}" method="POST" style="display: inline;">
+                                            {{ method_field('DELETE') }}
+                                            {{ csrf_field() }}
+                                            <button type="button" class="btn btn-outline btn-danger" onclick="layer.confirm('确定要删除吗?', {btn: ['确定','返回']}, function(){$('#from').submit();});">删除</button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -62,7 +68,7 @@
         layer.open({
             title :$title,
             type: 2,
-            area: ['500px', '500px'],
+            area: ['500px', '550px'],
             skin: 'layui-layer-rim', //加上边框
             content: [$url, 'no']
         });
@@ -71,9 +77,9 @@
         layer.open({
             title :$title,
             type: 2,
-            area: ['500px', '350px'],
+            area: ['500px', '450px'],
             skin: 'layui-layer-rim', //加上边框
-            content: [$url+$id, 'no']
+            content: [$url+'/'+$id, 'no']
         });
     }
 </script>

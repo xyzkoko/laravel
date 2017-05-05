@@ -33,8 +33,8 @@
                             <td>{{$rows['rule']}}</td>
                             <td>@if($rows['disabled']) 禁用 @else 可用 @endif</td>
                             <td class="center">
-                                @if(isset($buttonList[10]) && $rows['roleid'] != 1)<button class="btn btn-outline btn-warning" type="button" onclick="window.location='{{$buttonList[10]['route']}}'">修改</button>@endif&nbsp;&nbsp;
-                                @if(isset($buttonList[11]) && $rows['roleid'] != 1)<button class="btn btn-outline btn-danger" type="button" onclick="if(confirm('确定要删除吗?'))window.location='{{$buttonList[11]['route']}}'">删除</button>@endif
+                                @if(isset($buttonList[10]) && $rows['roleid'] > Auth::user()->roleid)<button class="btn btn-outline btn-warning" type="button" onclick="window.location='{{$buttonList[10]['route']}}'">修改</button>@endif&nbsp;&nbsp;
+                                @if(isset($buttonList[11]) && $rows['roleid'] > Auth::user()->roleid)<button class="btn btn-outline btn-danger" type="button" onclick="if(confirm('确定要删除吗?'))window.location='{{$buttonList[11]['route']}}'">删除</button>@endif
                             </td>
                         </tr>
                         @endforeach
