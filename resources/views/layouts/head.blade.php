@@ -10,7 +10,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
+    <!-- JQ -->
+    <script src="{{ asset('js/jquery-3.0.0.min.js') }}"></script>
     <!-- Styles -->
     {{--<link href="{{ asset('css/app.css') }}" rel="stylesheet">--}}
     <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
@@ -30,7 +31,6 @@
 @yield('head')
 <!-- Scripts -->
 {{--<script src="{{ asset('js/app.js') }}"></script>--}}
-<script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap.js') }}"></script>
 <script src="{{ asset('js/metisMenu.js') }}"></script>
 <script src="{{ asset('js/raphael.js') }}"></script>
@@ -41,5 +41,6 @@
 <script src="{{ asset('js/dataTables.bootstrap.js') }}"></script>
 <script src="{{ asset('js/dataTables.responsive.js') }}"></script>
 <script src="{{ asset('js/layer/layer.js') }}"></script>
+
 </body>
 </html>

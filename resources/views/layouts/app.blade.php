@@ -111,12 +111,12 @@
                     <ul class="nav" id="side-menu">
                         @foreach ($menuList as $rows)
                             <li>
-                                <a href="#{{$rows['route']}}"><i class="fa {{$rows['icon']}} fa-fw"></i> {{$rows['name']}}@if(isset($rows['child']))<span class="fa arrow"></span>@endif</a>
+                                <a href="#{{$rows['namespace'].'/'.$rows['action']}}"><i class="fa {{$rows['icon']}} fa-fw"></i> {{$rows['name']}}@if(isset($rows['child']))<span class="fa arrow"></span>@endif</a>
                                 @if(isset($rows['child']))
                                     <ul class="nav nav-second-level">
                                         @foreach ($rows['child'] as $rows2)
                                             <li>
-                                                <a href="{{$rows2['route']}}">{{$rows2['name']}}</a>
+                                                <a href="/{{$rows2['namespace'].'/'.$rows2['action']}}">{{$rows2['name']}}</a>
                                             </li>
                                         @endforeach
                                     </ul>

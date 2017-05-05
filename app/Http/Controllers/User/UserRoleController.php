@@ -26,4 +26,8 @@ class UserRoleController extends Controller
         $userRoleList = UserRole::all()->toArray();
         return view('user.userRole', ['userRoleList' => $userRoleList]);
     }
+    public function show(){
+        $userRoleList = UserRole::all()->toArray();
+        return view('user.userRole', ['userRoleList' => $userRoleList]);
+    }
 }

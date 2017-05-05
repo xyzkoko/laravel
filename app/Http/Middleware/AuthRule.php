@@ -25,29 +25,32 @@ class AuthRule
         $user = User::with('userRole')->find($id)->toArray();
         $rule = $user['user_role']['rule'];
         $path = RouteName::currentRouteName();       //路由名称
+        $path = explode('.',$path);
+        $namespace = isset($path[0])?$path[0]:null;
+        $action = isset($path[1])?$path[1]:null;
+        $route = Route::where('namespace',$namespace)->where('action',$action)->first(['id']);
         if($rule != 'all'){
-            $route = Route::where('route',$path)->first();
             $ruleArray = explode(',',$rule);
             if(!in_array($route->id,$ruleArray)){
-                return redirect('/');
+                return redirect('/')->with('message', '没有权限！');
             }
         }
         //返回页面按钮
-        view()->share('buttonList', $this->getButton($rule,$path));
+        view()->share('buttonList', $this->getButton($rule,$route));
         return $next($request);
     }
 
-    private function getButton($rule,$path){
-        $parentid = Route::where('route',$path)->first(['id']);
+    private function getButton($rule,$route){
         if($rule == 'all'){
-            $buttons = Route::where('parentid',$parentid->id)->get();
+            $buttons = Route::where('parentid',$route->id)->get();
         }else{
             $ruleArray = explode(',',$rule);
-            $buttons = Route::where('parentid',$parentid->id)->whereIn('id',$ruleArray)->get();
+            $buttons = Route::where('parentid',$route->id)->whereIn('id',$ruleArray)->get();
         }
         foreach ($buttons as $button) {
             $this->button[$button->id]['name'] = $button->name;
-            $this->button[$button->id]['route'] = $button->route;
+            $this->button[$button->id]['namespace'] = $button->namespace;
+            $this->button[$button->id]['action'] = $button->action;
         }
         return $this->button;
     }

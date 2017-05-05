@@ -71,7 +71,7 @@ function fromSubmit(){
         success: function(data){
             if(data.status=='success'){
                 layer.msg(data.msg, {time:1000}, function(){
-                    parent.location.href="/user";
+                    parent.location.href="/user/index";
                 });
             }
         },

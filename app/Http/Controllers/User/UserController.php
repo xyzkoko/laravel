@@ -6,6 +6,7 @@ use App\Model\User;
 use App\Model\UserRole;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 
@@ -34,16 +35,16 @@ class UserController extends Controller
      * @param Request $request
      * @return json
      */
-    public function add(Request $request)
+    public function create(Request $request)
     {
         if($request->isMethod('get')){      //跳转页面
-            $userRoleList = UserRole::where('disabled','<>',1)->orderBy('listorder','desc')->get();
+            $userRoleList = UserRole::where('disabled','<>',1)->where('roleid','>=',Auth::user()->roleid)->orderBy('listorder','desc')->get();
             return view('user.userAdd', ['userRoleList' => $userRoleList]);
         }elseif($request->isMethod('post')){        //表单请求
-            return $this->addPost($request);
+            return $this->createPost($request);
         }
     }
-    private function addPost($request){
+    private function createPost($request){
         $this->validate($request, [
             'name' => 'bail|required|unique:users|max:255',
             'email' => 'bail|required|unique:users|max:255|email',
@@ -83,7 +84,7 @@ class UserController extends Controller
     {
         if($request->isMethod('get')){      //跳转页面
             $userInfo = User::with('userRole')->find($id);
-            $userRoleList = UserRole::where('disabled','<>',1)->orderBy('listorder','desc')->get();
+            $userRoleList = UserRole::where('disabled','<>',1)->where('roleid','>=',Auth::user()->roleid)->orderBy('listorder','desc')->get();
             return view('user.userUpdate',['userInfo' => $userInfo,'userRoleList' => $userRoleList]);
         }elseif($request->isMethod('post')){        //表单请求
             return $this->updatePost($request,$id);
@@ -114,7 +115,7 @@ class UserController extends Controller
      * @param int $id
      * @return json
      */
-    public function delete($id)
+    public function destroy($id)
     {
         $result = User::destroy($id);
         if($result){

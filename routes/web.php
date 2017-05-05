@@ -16,15 +16,15 @@ Auth::routes();
 Route::get('/', 'HomeController@index');
 
 Route::group(['namespace' => 'User','middleware' => 'auth.rule'], function(){
-    Route::get('user', 'UserController@index')->name('user');
-    Route::any('user/add', 'UserController@add')->name('user/add');
-    Route::any('user/update/{id}', 'UserController@update')->name('user/update');
-    Route::delete('user/delete/{id}', 'UserController@delete')->name('user/delete');
-
-    Route::get('userRole', 'UserRoleController@index')->name('userRole');
-    //test
-    Route::get('game', 'UserController@index')->name('game');
+    //用户列表
+    Route::get('user/index', 'UserController@index')->name('user.index');
+    Route::any('user/create', 'UserController@create')->name('user.create');
+    Route::any('user/{id}/update', 'UserController@update')->name('user.update');
+    Route::delete('user/{id}/destroy', 'UserController@destroy')->name('user.destroy');
+    //用户组列表
+    Route::resource('userRole', 'UserRoleController');
 });
+
 
 
 

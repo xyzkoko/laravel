@@ -29,7 +29,9 @@ class MenuRepository implements MenuInterface
                 if($rows[$k]['parentid'] == 0){
                     $this->menuList[$rows[$k]['id']] = $rows[$k];
                 }else{
-                    $this->menuList[$rows[$k]['parentid']]['child'][] = $rows[$k];
+                    if(isset($this->menuList[$rows[$k]['parentid']])){
+                        $this->menuList[$rows[$k]['parentid']]['child'][] = $rows[$k];
+                    }
                 }
             }
         }

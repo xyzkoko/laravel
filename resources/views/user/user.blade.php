@@ -13,7 +13,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading" style="overflow:hidden;line-height: 34px;">
                     DataTables Advanced Tables
-                    @if(isset($buttonList[3]))<button class="btn btn-primary" type="button" style="float:right;" onclick="userAdd('{{$buttonList[3]['route']}}','{{$buttonList[3]['name']}}')">{{$buttonList[3]['name']}}</button>@endif
+                    @if(isset($buttonList[3]))<button class="btn btn-primary" type="button" style="float:right;" onclick="userAdd('{{$buttonList[3]['namespace']}}','{{$buttonList[3]['action']}}','{{$buttonList[3]['name']}}')">{{$buttonList[3]['name']}}</button>@endif
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
@@ -37,9 +37,9 @@
                                 <td>{{$rows['created_at']}}</td>
                                 <td class="center">{{$rows['updated_at']}}</td>
                                 <td class="center">
-                                    @if(isset($buttonList[8]) && $rows['id'] != Auth::user()->id && $rows['roleid'] >= Auth::user()->roleid)<button class="btn btn-outline btn-warning" type="button" onclick="userUpdate('{{$buttonList[8]['route']}}','{{$buttonList[8]['name']}}','{{$rows['id']}}')">修改</button>@endif&nbsp;&nbsp;
+                                    @if(isset($buttonList[8]) && $rows['id'] != Auth::user()->id && $rows['roleid'] >= Auth::user()->roleid)<button class="btn btn-outline btn-warning" type="button" onclick="userUpdate('{{$buttonList[8]['namespace']}}','{{$buttonList[8]['action']}}','{{$buttonList[8]['name']}}','{{$rows['id']}}')">修改</button>@endif&nbsp;&nbsp;
                                     @if(isset($buttonList[9]) && $rows['id'] != Auth::user()->id && $rows['roleid'] >= Auth::user()->roleid)
-                                        <form id="from" action="{{$buttonList[9]['route'].'/'.$rows['id']}}" method="POST" style="display: inline;">
+                                        <form id="from" action="/{{$buttonList[9]['namespace'].'/'.$rows['id'].'/'.$buttonList[9]['action']}}" method="POST" style="display: inline;">
                                             {{ method_field('DELETE') }}
                                             {{ csrf_field() }}
                                             <button type="button" class="btn btn-outline btn-danger" onclick="layer.confirm('确定要删除吗?', {btn: ['确定','返回']}, function(){$('#from').submit();});">删除</button>
@@ -63,23 +63,26 @@
         $('#dataTables-admin').DataTable({
             responsive: true
         });
+        @if(Session::has('message'))
+            layer.msg('{{Session::get('message')}}',{time:1000});
+        @endif
     });
-    function userAdd($url,$title){
+    function userAdd(namespace,action,title){
         layer.open({
-            title :$title,
+            title :title,
             type: 2,
             area: ['500px', '550px'],
             skin: 'layui-layer-rim', //加上边框
-            content: [$url, 'no']
+            content: ['/'+namespace+'/'+action, 'no']
         });
     }
-    function userUpdate($url,$title,$id){
+    function userUpdate(namespace,action,title,id){
         layer.open({
-            title :$title,
+            title :title,
             type: 2,
             area: ['500px', '450px'],
             skin: 'layui-layer-rim', //加上边框
-            content: [$url+'/'+$id, 'no']
+            content: ['/'+namespace+'/'+id+'/'+action, 'no']
         });
     }
 </script>
